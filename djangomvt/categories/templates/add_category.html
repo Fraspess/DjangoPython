@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h1>Додати категорію</h1>
-<div class="row">
-  <form class="col-md-6 offset-md-3" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label for="name" class="form-label">Назва</label>
-      <input type="text" class="form-control" id="name" name="name" />
+  <h1>Додати категорію</h1>
+  <div class="row">
+    <form class="col-md-6 offset-md-3" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="name" class="form-label">Назва</label>
+        <input type="text" class="form-control" id="name" name="name" />
       </div>
 
       <div class="mb-3">
@@ -22,16 +22,17 @@
 
       <div class="mb-3">
         <label for="updated_at" class="form-label">Оновлено в останій раз</label>
-        <input type="date" class="form-control" id="updated_at" name="updated_at"/>
+        <input type="date" class="form-control" id="updated_at" name="updated_at" />
       </div>
 
       <div class="mb-3">
         <label for="image" class="form-label">Зображення</label>
         <input type="file" class="form-control" id="image" accept="image/*" name="image" />
+        <img src="" id="imagePreview" style="display:block; max-width: 100%;" />
       </div>
 
       <div class="form-check mb-3">
-        <input type="checkbox" value="checked" class="form-check-input" id="is_active" name="is_active"/>
+        <input type="checkbox" value="checked" class="form-check-input" id="is_active" name="is_active" />
         <label for="is_active" class="form-label">Чи активна</label>
       </div>
 
@@ -46,5 +47,21 @@
     var dateNow = new Date().toISOString().split('T')[0]
     document.getElementById('created_at').value = dateNow
     document.getElementById('updated_at').value = dateNow
+  </script>
+
+  <script>
+    function loadImage(fileInput) {
+      const image = document.getElementById('imagePreview')
+      const objectUrl = URL.createObjectURL(fileInput.files[0])
+      image.src = objectUrl
+      const cropper = new Cropper(image, {
+        aspectRatio: 16 / 9
+      })
+    }
+    const fileInput = document.getElementById('image')
+    fileInput.addEventListener('change', function() {
+      loadImage(this)
+    })
+    loadImage(fileInput)
   </script>
 {% endblock %}
