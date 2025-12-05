@@ -1,44 +1,50 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-  <h1>Додати категорію</h1>
-  <div class="row">
-    <form class="col-md-6 offset-md-3">
-      <div class="mb-3">
-        <label for="name" class="form-label">Назва</label>
-        <input type="text" class="form-control" id="name" />
+<h1>Додати категорію</h1>
+<div class="row">
+  <form class="col-md-6 offset-md-3" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="name" class="form-label">Назва</label>
+      <input type="text" class="form-control" id="name" name="name" />
       </div>
 
       <div class="mb-3">
         <label for="slug" class="form-label">Slug</label>
-        <input type="text" class="form-control" id="slug" />
+        <input type="text" class="form-control" id="slug" name="slug" />
       </div>
 
       <div class="mb-3">
         <label for="created_at" class="form-label">Створено</label>
-        <input type="date" class="form-control" id="created_at" />
+        <input type="date" class="form-control" id="created_at" name="created_at" />
       </div>
 
       <div class="mb-3">
         <label for="updated_at" class="form-label">Оновлено в останій раз</label>
-        <input type="date" class="form-control" id="updated_at" />
+        <input type="date" class="form-control" id="updated_at" name="updated_at"/>
       </div>
 
       <div class="mb-3">
         <label for="image" class="form-label">Зображення</label>
-        <input type="file" class="form-control" id="image" accept="image/*" />
+        <input type="file" class="form-control" id="image" accept="image/*" name="image" />
       </div>
 
-      <div class="mb-3">
-        <label for="is_active" class="form-label">Зображення</label>
-        <input type="checkbox" class="form-control" id="is_active" accept="image/*" />
+      <div class="form-check mb-3">
+        <input type="checkbox" value="checked" class="form-check-input" id="is_active" name="is_active"/>
+        <label for="is_active" class="form-label">Чи активна</label>
       </div>
 
-    
-      <label for="desription" class="form-label">Опис</label>
-      <textarea id="description"></textarea>
+      <label for="description" class="form-label">Опис</label>
+      <textarea name="description" id="description"></textarea>
 
       <button type="submit" class="btn btn-primary">Додати</button>
     </form>
   </div>
+
+  <script>
+    var dateNow = new Date().toISOString().split('T')[0]
+    document.getElementById('created_at').value = dateNow
+    document.getElementById('updated_at').value = dateNow
+  </script>
 {% endblock %}

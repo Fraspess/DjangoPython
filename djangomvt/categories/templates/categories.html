@@ -2,13 +2,13 @@
      {%block content%}
    <h1>Список категорій</h1>
    <div>
-          <a href="add" class="btn-success">Додати категорію</a>
+          <a href="add" class="btn" style="background-color: #212529; color: white;">Додати категорію</a>
    </div>
     <ul>
          {% for category in categories %}
               <li>
                 <h2>{{ category.name }}</h2>
-                <p>{{ category.description }}</p>
+                {{category.description | safe}} <br/>
                 {% if category.image %}
                      <img src="{{ category.image.url }}" 
                         alt="{{ category.name }}"
