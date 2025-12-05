@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+     {%block content%}
+   <h1>Список категорій</h1>
+   <div>
+          <a href="add" class="btn-success">Додати категорію</a>
+   </div>
+    <ul>
+         {% for category in categories %}
+              <li>
+                <h2>{{ category.name }}</h2>
+                <p>{{ category.description }}</p>
+                {% if category.image %}
+                     <img src="{{ category.image.url }}" 
+                        alt="{{ category.name }}"
+                        width="250">
+                {% endif %}
+              </li>
+         {% empty %}
+              <li>Категорії відсутні.</li>
+         {% endfor %}
+    </ul>
+    {%endblock%}
