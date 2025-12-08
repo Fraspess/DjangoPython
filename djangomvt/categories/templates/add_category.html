@@ -3,29 +3,21 @@
 {% block content %}
   <h1>Додати категорію</h1>
   <div class="row">
-    <form class="col-md-6 offset-md-3" method="post" enctype="multipart/form-data">
+    <form class="col-md-6 offset-md-3 needs-validation" method="post" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
-
 
       <div class="mb-3">
         <label for="name" class="form-label">Назва</label>
-        <input type="text" class="form-control" id="name" name="name" required minlength="3" maxlength="20" />
-      </div>
-
-      <div class="mb-3">
-        <label for="created_at" class="form-label">Створено</label>
-        <input type="date" class="form-control" id="created_at" name="created_at" required />
-      </div>
-
-      <div class="mb-3">
-        <label for="updated_at" class="form-label">Оновлено в останій раз</label>
-        <input type="date" class="form-control" id="updated_at" name="updated_at" required />
+        <input type="text" class="form-control" id="name" name="name" required />
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Будь ласка, введіть назву категорії</div>
       </div>
 
       <div class="mb-3">
         <label for="image" class="form-label">Зображення</label>
-        <input type="file" class="form-control" id="image" accept="image/*" name="image" />
+        <input type="file" class="form-control" id="image" accept="image/*" name="image" required />
         <img src="" id="imagePreview" style="display:block; max-width: 100%;" />
+        <div class="invalid-feedback">Будь ласка, загрузіть картинку для категорії</div>
       </div>
 
       <div class="form-check mb-3">
@@ -33,35 +25,74 @@
         <label for="is_active" class="form-label">Чи активна</label>
       </div>
 
-      <label for="description" class="form-label">Опис</label>
-      <textarea name="description" id="description"></textarea>
+      <div>
+        <label for="description" class="form-label">Опис</label>
+        <textarea required name="description" id="description"></textarea>
+        <div class="invalid-feedback">Опис не може бути порожнім</div>
+      </div>
 
       <button type="submit" class="btn btn-primary">Додати</button>
     </form>
   </div>
 
   <script>
-    var dateNow = new Date().toISOString().split('T')[0]
-    var isActive = document.getElementById('is_active')
-    isActive.checked = true
-    document.getElementById('created_at').value = dateNow
-    document.getElementById('updated_at').value = dateNow
+    var cropper
+    window.addEventListener('load', () => {
+      const input = document.getElementById('image')
+      const imagePreview = document.getElementById('imagePreview')
+      if (input.files.length !== 0) {
+        imagePreview.src = URL.createObjectURL(input.files[0])
+        if (cropper) {
+          cropper.destroy()
+        }
+        cropper = new Cropper(imagePreview, { aspectRatio: 16 / 9 })
+      }
+      input.addEventListener('change', (e) => {
+        const files = e.target.files
+        if (files) {
+          const file = files[0]
+          if (file) {
+            imagePreview.src = URL.createObjectURL(file)
+            if (cropper) {
+              cropper.destroy()
+            }
+            cropper = new Cropper(imagePreview, { aspectRatio: 16 / 9 })
+          }
+        }
+      })
+    })
   </script>
 
   <script>
-    function loadImage(fileInput) {
-      const image = document.getElementById('imagePreview')
-      const objectUrl = URL.createObjectURL(fileInput.files[0])
-      image.src = objectUrl
-      const cropper = new Cropper(image, {
-        aspectRatio: 16 / 9
-      })
-    }
-    const fileInput = document.getElementById('image')
-    fileInput.addEventListener('change', function () {
-      loadImage(this)
-    })
-    loadImage(fileInput)
+    let isActive = document.getElementById("is_active")
+    isActive.checked = true
   </script>
 
+  {% block scripts %}
+
+    <script>
+      ;(function () {
+        'use strict'
+      
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+      
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach(function (form) {
+          form.addEventListener(
+            'submit',
+            function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+      
+              form.classList.add('was-validated')
+            },
+            false
+          )
+        })
+      })()
+    </script>
+  {% endblock %}
 {% endblock %}
