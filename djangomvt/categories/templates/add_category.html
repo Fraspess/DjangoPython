@@ -5,24 +5,21 @@
   <div class="row">
     <form class="col-md-6 offset-md-3" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="mb-3">
-        <label for="name" class="form-label">Назва</label>
-        <input type="text" class="form-control" id="name" name="name" />
-      </div>
+
 
       <div class="mb-3">
-        <label for="slug" class="form-label">Slug</label>
-        <input type="text" class="form-control" id="slug" name="slug" />
+        <label for="name" class="form-label">Назва</label>
+        <input type="text" class="form-control" id="name" name="name" required minlength="3" maxlength="20" />
       </div>
 
       <div class="mb-3">
         <label for="created_at" class="form-label">Створено</label>
-        <input type="date" class="form-control" id="created_at" name="created_at" />
+        <input type="date" class="form-control" id="created_at" name="created_at" required />
       </div>
 
       <div class="mb-3">
         <label for="updated_at" class="form-label">Оновлено в останій раз</label>
-        <input type="date" class="form-control" id="updated_at" name="updated_at" />
+        <input type="date" class="form-control" id="updated_at" name="updated_at" required />
       </div>
 
       <div class="mb-3">
@@ -45,6 +42,8 @@
 
   <script>
     var dateNow = new Date().toISOString().split('T')[0]
+    var isActive = document.getElementById('is_active')
+    isActive.checked = true
     document.getElementById('created_at').value = dateNow
     document.getElementById('updated_at').value = dateNow
   </script>
@@ -59,9 +58,10 @@
       })
     }
     const fileInput = document.getElementById('image')
-    fileInput.addEventListener('change', function() {
+    fileInput.addEventListener('change', function () {
       loadImage(this)
     })
     loadImage(fileInput)
   </script>
+
 {% endblock %}
