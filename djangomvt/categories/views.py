@@ -21,10 +21,7 @@ def add_category(request):
         category_is_active = request.POST.get("is_active") == "checked"
         category_image = request.FILES.get("image")
 
-        category_created_at = datetime.datetime.now()
-        category_updated_at = datetime.datetime.now()
-
-        category = Category(name = category_name, slug = category_slug, description = category_description, created_at = category_created_at, updated_at = category_updated_at, is_active = category_is_active, image = category_image)
+        category = Category(name = category_name, slug = category_slug, description = category_description, is_active = category_is_active, image = category_image)
         category.save()
 
         return redirect('/categories/')

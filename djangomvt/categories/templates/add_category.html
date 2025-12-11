@@ -1,14 +1,9 @@
 {% extends 'layout.html' %}
-{%load static%}
+{% load static %}
 
-{%block mystyles%}
-    <link  href="{%static 'css/cropper.min.css' %}" rel="stylesheet">
-{%endblock%}
-
-
-c
-
-{% block content %}
+{% block mystyles %}
+  <link href="{% static 'css/cropper.min.css' %}" rel="stylesheet" />
+{% endblock %}c{% block content %}
   <h1>Додати категорію</h1>
   <div class="row">
     <form class="col-md-6 offset-md-3 needs-validation" method="post" enctype="multipart/form-data" novalidate>
@@ -23,8 +18,7 @@ c
 
       <div class="mb-3">
         <label for="image" class="form-label">Зображення</label>
-        <input type="file" class="form-control" id="image" accept="image/*" name="imageName" required />
-        <input type="hidden" id="base64image" name="image"/>
+        <input type="file" class="form-control" id="image" accept="image/*" required name="image" />
         {% comment %} <img src="" id="imagePreview" style="display:block; max-width: 100%;" /> {% endcomment %}
         <div class="invalid-feedback">Будь ласка, загрузіть картинку для категорії</div>
       </div>
@@ -40,98 +34,98 @@ c
         <div class="invalid-feedback">Опис не може бути порожнім</div>
       </div>
 
-      
       <button type="submit" class="btn btn-primary">Додати</button>
     </form>
   </div>
   <!-- Modal -->
-<div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h1 class="modal-title fs-5" id="exampleModalLabel">Редагування фото</h1>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-      <div>
-        <img src="" id="imagePreview" width="100%"/>
+  <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Редагування фото</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <img src="" id="imagePreview" width="100%" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="btnCroppedImage" class="btn btn-primary">Зберегти</button>
+        </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      <button type="button" id="btnCroppedImage" class="btn btn-primary">Зберегти</button>
-    </div>
   </div>
-</div>
-</div>
 
-
-<script>
-  let isActive = document.getElementById("is_active")
-  isActive.checked = true
-</script>
-
+  <script>
+    let isActive = document.getElementById('is_active')
+    isActive.checked = true
+  </script>
 {% endblock %}
 {% block scripts %}
-<script>
-  window.addEventListener('load', () => {
-    var cropper
-  const exampleModal = new bootstrap.Modal('#exampleModal')
-
-  image.addEventListener('change', (e) => {
-    const files = e.target.files
-    if (files) {
-      const file = files[0]
-      if (file) {
-        imagePreview.src = URL.createObjectURL(file)
-        exampleModal.show()
-      }
-    }
-  })
-
-    document.getElementById("exampleModal").addEventListener('shown.bs.modal',event => {
-      cropper = new Cropper(imagePreview,{autoCropArea:0.5})
-    });
+  <script>
+    window.addEventListener('load', () => {
+      var cropper
+      const exampleModal = new bootstrap.Modal('#exampleModal')
     
+      image.addEventListener('change', (e) => {
+        const files = e.target.files
+        if (files) {
+          const file = files[0]
+          if (file) {
+            imagePreview.src = URL.createObjectURL(file)
+            exampleModal.show()
+          }
+        }
+      })
     
-    document.getElementById("exampleModal").addEventListener('hidden.bs.modal',evemt => {
-      cropper.destroy()
-    });
+      document.getElementById('exampleModal').addEventListener('shown.bs.modal', (event) => {
+        cropper = new Cropper(imagePreview, { autoCropArea: 0.5 })
+      })
     
-    btnCroppedImage.addEventListener("click", () => {
-      var croppedImage = cropper.getCroppedCanvas().toDataURL("image/png");
-      base64image.value = croppedImage
-      exampleModal.hide()
-    });
-
-    const imagePreview = document.getElementById('imagePreview')
-
-  });
-</script>
-<script src="{%static 'js/cropper.min.js'%}"></script>
-
-    <script>
-      ;(function () {
-        'use strict'
-      
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.querySelectorAll('.needs-validation')
-      
-        // Loop over them and prevent submission
-        Array.prototype.slice.call(forms).forEach(function (form) {
-          form.addEventListener(
-            'submit',
-            function (event) {
-              if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-              }
-      
-              form.classList.add('was-validated')
-            },
-            false
-          )
+      document.getElementById('exampleModal').addEventListener('hidden.bs.modal', (evemt) => {
+        cropper.destroy()
+      })
+    
+      btnCroppedImage.addEventListener('click', () => {
+        var croppedImage = cropper.getCroppedCanvas().toBlob(function (blob) {
+          const uniqueFileName = crypto.randomUUID() + '.png'
+          const file = new File([blob], uniqueFileName, { type: 'image/png' })
+          const dataTransfer = new DataTransfer()
+          dataTransfer.items.add(file)
+          image.files = dataTransfer.files
         })
-      })()
-    </script>
-  {% endblock %}
+        exampleModal.hide()
+      })
+    
+      const imagePreview = document.getElementById('imagePreview')
+    })
+  </script>
+  <script src="{% static 'js/cropper.min.js' %}"></script>
+
+  <script>
+    ;(function () {
+      'use strict'
+    
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
+    
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener(
+          'submit',
+          function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+    
+            form.classList.add('was-validated')
+          },
+          false
+        )
+      })
+    })()
+  </script>
+{% endblock %}
