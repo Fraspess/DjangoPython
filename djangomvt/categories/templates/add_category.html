@@ -3,8 +3,10 @@
 
 {% block mystyles %}
   <link href="{% static 'css/cropper.min.css' %}" rel="stylesheet" />
-{% endblock %}c{% block content %}
-  <h1>Додати категорію</h1>
+{% endblock %}
+{% block content %}
+
+<h1 style="text-align:center;">Додати категорію</h1>
   <div class="row">
     <form class="col-md-6 offset-md-3 needs-validation" method="post" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
@@ -16,9 +18,12 @@
         <div class="invalid-feedback">Будь ласка, введіть назву категорії</div>
       </div>
 
-      <div class="mb-3">
-        <label for="image" class="form-label">Зображення</label>
-        <input type="file" class="form-control" id="image" accept="image/*" required name="image" />
+      
+      <input type="file" class="form-control" id="image" accept="image/*" required name="image" />
+      <div class="mb-3 mt-3" style="text-align:center;">
+        <label for="image" class="form-label">
+          <img id="imgView" src="/images/noimage.jpg" width="300">
+        </label>
         {% comment %} <img src="" id="imagePreview" style="display:block; max-width: 100%;" /> {% endcomment %}
         <div class="invalid-feedback">Будь ласка, загрузіть картинку для категорії</div>
       </div>
@@ -30,11 +35,10 @@
 
       <div>
         <label for="description" class="form-label">Опис</label>
-        <textarea required name="description" id="description"></textarea>
-        <div class="invalid-feedback">Опис не може бути порожнім</div>
+        <textarea name="description" id="description"></textarea>
       </div>
 
-      <button type="submit" class="btn btn-primary">Додати</button>
+      <button type="submit" id="confirmBtn" class="btn btn-primary">Додати</button>
     </form>
   </div>
   <!-- Modal -->
@@ -58,13 +62,75 @@
     </div>
   </div>
 
+  {% endblock %}
+  {% block scripts %}
+  <script src="https://cdn.tiny.cloud/1/vvjvo7kl3d6bh5xriji4khj5vcgeynj3hvajabce6xamq664/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
   <script>
     let isActive = document.getElementById('is_active')
     isActive.checked = true
   </script>
-{% endblock %}
-{% block scripts %}
-  <script>
+
+<script>
+
+
+    tinymce.init({
+      selector: 'textarea',
+      plugins: [
+        // Core editing features
+        'anchor',
+        'autolink',
+        'charmap',
+        'codesample',
+        'emoticons',
+        'link',
+        'lists',
+        'media',
+        'searchreplace',
+        'table',
+        'visualblocks',
+        'wordcount',
+        // Your account includes a free trial of TinyMCE premium features
+        // Try the most popular premium features until Dec 19, 2025:
+        'checklist',
+        'mediaembed',
+        'casechange',
+        'formatpainter',
+        'pageembed',
+        'a11ychecker',
+        'tinymcespellchecker',
+        'permanentpen',
+        'powerpaste',
+        'advtable',
+        'advcode',
+        'advtemplate',
+        'ai',
+        'uploadcare',
+        'mentions',
+        'tinycomments',
+        'tableofcontents',
+        'footnotes',
+        'mergetags',
+        'autocorrect',
+        'typography',
+        'inlinecss',
+        'markdown',
+        'importword',
+        'exportword',
+        'exportpdf'
+      ],
+      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+      tinycomments_mode: 'embedded',
+      tinycomments_author: 'Author name',
+      mergetags_list: [
+        { value: 'First.Name', title: 'First Name' },
+        { value: 'Email', title: 'Email' }
+      ],
+      ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+      uploadcare_public_key: 'eadf712b9c2e6cb05c3d'
+    })
+  </script>
+
+<script>
     window.addEventListener('load', () => {
       var cropper
       const exampleModal = new bootstrap.Modal('#exampleModal')
@@ -89,6 +155,8 @@
       })
     
       btnCroppedImage.addEventListener('click', () => {
+        var base64 = cropper.getCroppedCanvas().toDataURL()
+        imgView.src = base64
         var croppedImage = cropper.getCroppedCanvas().toBlob(function (blob) {
           const uniqueFileName = crypto.randomUUID() + '.png'
           const file = new File([blob], uniqueFileName, { type: 'image/png' })
@@ -102,9 +170,11 @@
       const imagePreview = document.getElementById('imagePreview')
     })
   </script>
+
   <script src="{% static 'js/cropper.min.js' %}"></script>
 
-  <script>
+
+<script>
     ;(function () {
       'use strict'
     
@@ -117,10 +187,10 @@
           'submit',
           function (event) {
             if (!form.checkValidity()) {
+              event.stopPropagation() 
               event.preventDefault()
-              event.stopPropagation()
             }
-    
+            
             form.classList.add('was-validated')
           },
           false
