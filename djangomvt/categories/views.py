@@ -21,8 +21,52 @@ def add_category(request):
         category_is_active = request.POST.get("is_active") == "checked"
         category_image = request.FILES.get("image")
 
-        category = Category(name = category_name, slug = category_slug, description = category_description, is_active = category_is_active, image = category_image)
+        category = Category(
+            name = category_name, 
+            slug = category_slug,
+            description = category_description,
+            is_active = category_is_active,
+            image = category_image)
         category.save()
 
         return redirect('/categories/')
     return render(request, "add_category.html")
+
+import os
+def delete_category(request):
+    if request.method == "POST":
+        category_id = request.POST.get("id")
+        try:
+            category = Category.objects.get(id = category_id)
+            if os.path.exists(category.image.path):
+                os.remove(category.image.path)      
+            category.delete()
+        except:
+            print("Error has occured while deleting category")
+        
+    return redirect('/categories/')
+        
+def edit_category(request):
+    if request.method == "GET":
+        category_id = request.GET.get("id")
+        category = Category.objects.get(id = category_id)
+        return render(request, "edit_category.html",{"category":category})
+    
+    elif request.method == "POST":
+        category_id = request.POST.get("id")
+        category = Category.objects.get(id = category_id)
+
+        if category:
+            category.name = request.POST.get("name")
+            category.slug = slugify(unidecode(category.name))
+            description = request.POST.get("description")
+            if description != "":
+                category.description = description
+            category.is_active = request.POST.get("is_active") == "checked"
+            if 'image' in request.FILES:
+                if os.path.exists(category.image.path):
+                    os.remove(category.image.path)  
+                category.image = request.FILES.get("image")
+            category.save()
+            return redirect('/categories/')
+    return redirect('/categories/')
