@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uk-UA'
 
 TIME_ZONE = 'UTC'
 
@@ -142,7 +142,12 @@ IMAGE_URL = '/images/'
 
 IMAGES_ROOT = BASE_DIR / 'images'
 
+AVATARS_URL = '/avatars/'
+
+AVATARS_ROOT = BASE_DIR / 'avatars'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

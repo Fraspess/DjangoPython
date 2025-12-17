@@ -4,7 +4,7 @@ from .forms import CustomUserLogin
 from .utils import compress_image
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def register(request):
     if request.method == 'POST':
@@ -53,3 +53,9 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('categories:show_categories')
+
+
+@login_required(login_url='/users/login')
+def user_profile(request):
+    return render(request,'profile.html')
+
