@@ -36,17 +36,13 @@ def register(request):
 
 def user_login(request):
     if request.method == 'POST':
-        form = CustomUserLogin(request.POST)
+        form = CustomUserLogin(data=request.POST)
         if form.is_valid():
-            try:
-                user = CustomUserLogin(request.POST)
-
-                if user is not None:
-                    login(request,user)
-                    return redirect('categories:show_categories')
+            user = authenticate(request, username = form.cleaned_data['username'], password = form.cleaned_data['password'])
+            if user is not None:
+                login(request,user)
+                return redirect('categories:show_categories')
                     
-            except Exception as e:
-                messages.error(request, f'Помилка при вході на акаунт {str(e)}')
         else:
             messages.success(request, 'Виправте помилки в формі')
     else:
@@ -54,6 +50,6 @@ def user_login(request):
     return render(request, 'login.html', {'form':form})
 
 
-def logout(request):
+def user_logout(request):
     logout(request)
-    return render(request,'categories:show_categories')
+    return redirect('categories:show_categories')
