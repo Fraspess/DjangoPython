@@ -12,14 +12,12 @@
   
   </head>
 
-
-
   </script> 
   <body style="margin-top:3em;">
     <header data-bs-theme="dark">
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Carousel</a>
+          <a class="navbar-brand" href="/">Carousel</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
@@ -30,10 +28,18 @@
                 <a class="nav-link" href="/categories">Категорії</a>
               </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            {%if not user.is_authenticated%}
+              <div class="d-flex" style="margin-right:20px;" >
+                <a class="btn" style="background-color:black;" href="/users/login">Вхід</a>
+              </div>
+              <div class="d-flex" style="margin-right:20px;">
+                <a class="btn" width="100px" style="background-color:black;" href="/users/register">Реєстрація</a>
+              </div>
+            {%else%}
+              <div class="d-flex" style="margin-right:20px">
+                <a class='btn' style="background-color:black;" href="/users/logout">Вихід</a>
+              </div>
+            {%endif%}
           </div>
         </div>
       </nav>
