@@ -54,6 +54,11 @@ class CustomUserCreationForm(UserCreationForm):
     
 
 class CustomUserLogin(AuthenticationForm):
+    error_messages = {
+        'invalid_login': "Неправильне ім'я користувача або пароль",
+        'inactive': 'Цей акаунт неактивний',
+    }
+    
     username = forms.CharField(
         label="Ім'я користувача",
         widget=forms.TextInput(attrs={'class' : 'form-control'})
@@ -62,6 +67,15 @@ class CustomUserLogin(AuthenticationForm):
         label="Пароль",
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
+
+
+
+class RecoverPassword(forms.Form):
+    email = forms.EmailField(
+        label="Електронна пошта",
+        required=True,
+        widget= forms.TextInput(attrs={'class': 'form-control'})
+        )
 
     
     

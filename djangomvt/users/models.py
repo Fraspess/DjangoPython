@@ -8,6 +8,9 @@ class CustomUser(AbstractUser):
     image_large = models.ImageField(upload_to='avatars/', null=True, blank=True)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20)
+    token = models.CharField(max_length=100, null=True, blank=True)
+    isTokenUsed = models.BooleanField(default=True)
+    tokenExpire = models.DateTimeField(null=True, blank=True)
 
     def __str__ (self):
         return self.email
