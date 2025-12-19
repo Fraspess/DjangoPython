@@ -3,8 +3,10 @@ from .forms import CustomUserCreationForm
 from .forms import CustomUserLogin
 from .utils import compress_image
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib import admin
+from .models import CustomUser
+from django.core.mail import EmailMultiAlternatives
 # Create your views here.
 def register(request):
     if request.method == 'POST':
@@ -36,24 +38,28 @@ def register(request):
 
 def user_login(request):
     if request.method == 'POST':
-        form = CustomUserLogin(request.POST)
+        form = CustomUserLogin(request, data=request.POST)
         if form.is_valid():
-            try:
-                user = CustomUserLogin(request.POST)
-
-                if user is not None:
-                    login(request,user)
-                    return redirect('categories:show_categories')
-                    
-            except Exception as e:
-                messages.error(request, f'Помилка при вході на акаунт {str(e)}')
-        else:
-            messages.success(request, 'Виправте помилки в формі')
+                user = form.get_user()
+                login(request,user)
+                return redirect('categories:show_categories')            
     else:
         form = CustomUserLogin()
     return render(request, 'login.html', {'form':form})
 
 
-def logout(request):
+def user_logout(request):
     logout(request)
-    return render(request,'categories:show_categories')
+    return redirect('categories:show_categories')
+
+
+def recover_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if email is not None:
+            user = CustomUser.objects.filter(email=email).first()
+            messages.success(request, 'Інструкції для відновлення пароля надіслані на вашу електронну пошту.')
+            if user is not None:
+                print()
+        return render(request, 'recoverPassword.html')
+    return render(request, 'recoverPassword.html')

@@ -146,3 +146,12 @@ IMAGES_ROOT = BASE_DIR / 'images'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # The default backend
+EMAIL_HOST = 'smtp.gmail.com'                            # Your SMTP server host (e.g., smtp.gmail.com, smtp.office365.com)
+EMAIL_PORT = 587                                           # The port to connect to (587 for TLS, 465 for SSL)
+EMAIL_HOST_USER = 'pavlosamchyk@gmail.com'                 # Your username for the SMTP server
+EMAIL_HOST_PASSWORD = 'dcom fjwx qrqw arxs '                # Your password or app-specific password
+EMAIL_USE_TLS = True                                       # Use Transport Layer Security
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER    
