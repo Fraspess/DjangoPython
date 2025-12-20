@@ -7,6 +7,7 @@ from django.contrib.auth import login, logout
 from django.contrib import admin
 from .models import CustomUser
 from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def register(request):
     if request.method == 'POST':
@@ -63,3 +64,18 @@ def recover_password(request):
                 print()
         return render(request, 'recoverPassword.html')
     return render(request, 'recoverPassword.html')
+
+
+@login_required(login_url='/users/login')
+def user_profile(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        current_user = request.user
+        if current_user.is_authenticated:   
+            if first_name is not None:
+                current_user.first_name = first_name
+            if last_name is not None:
+                current_user.last_name = last_name
+            current_user.save()
+    return render(request,'profile.html')
