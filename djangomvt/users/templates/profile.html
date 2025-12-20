@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% load static%}
+
+{% block content %}
+    <div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="mt-5" width="200px" style="border-radius:50px;" src="/{{user.image_large}}">
+                <span class="font-weight-bold">{{user.username}}</span><span class="text-black-50">{{user.email}}</span><span> </span></div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Профіль</h4>
+                </div>
+
+                <form method="post">
+                {% csrf_token %}
+                <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">Ім'я</label><input type="text" name="first_name" class="form-control" placeholder="ім'я" value="{{user.first_name}}"></div>
+                        <div class="col-md-6"><label class="labels">Прізвище</label><input type="text" class="form-control" name="last_name" value="{{user.last_name}}" placeholder="прізвище"></div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Номер телефону</label><input type="text" readonly class="form-control" placeholder="введіть номер телефону" value="{{user.phone}}"></div>
+                        
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Електрона пошта</label><input readonly type="text" class="form-control" placeholder="введіть електрону почту" value="{{user.email}}"></div>
+                    </div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Зберегти</button></div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+<style>
+    body {
+    background: rgb(99, 39, 120)
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #BA68C8
+}
+
+.profile-button {
+    background: rgb(99, 39, 120);
+    box-shadow: none;
+    border: none
+}
+
+.profile-button:hover {
+    background: #682773
+}
+
+.profile-button:focus {
+    background: #682773;
+    box-shadow: none
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer
+}
+
+.labels {
+    font-size: 11px
+}
+
+.add-experience:hover {
+    background: #BA68C8;
+    color: #fff;
+    cursor: pointer;
+    border: solid 1px #BA68C8
+}
+</style>

@@ -3,17 +3,23 @@
 {% block content %}
   <h1 class="text-center">Вхід</h1>
 
-  <div class="row">
-    <div class="col-md-6 offset-md-3">
-      <form method="POST">
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-          <div class="alert alert-danger">
-            {% for error in form.non_field_errors %}
-              <p>{{ error }}</p>
+<div class = "row">
+<div class = "col-md-6 offset-md-3">
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        {% comment %} {% for field in form %}
+            {% for error in field.errors %}
+                <p>{{ field.label }}: {{ error }}</p>
             {% endfor %}
-          </div>
-        {% endif %}
+        {% endfor %} {% endcomment %}
+        {% for err in form.non_field_errors %}
+            <p class="form-error">{{ err }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
 
         <div class="mb-3">
           <label for="username" class="form-label">{{ form.username.label }}</label>
