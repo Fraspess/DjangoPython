@@ -14,21 +14,23 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="text-right">Профіль</h4>
                 </div>
+
+                <form method="post">
+                {% csrf_token %}
                 <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Ім'я</label><input type="text" class="form-control" placeholder="ім'я" value="{{user.first_name}}"></div>
-                    <div class="col-md-6"><label class="labels">Прізвище</label><input type="text" class="form-control" value="{{user.last_name}}" placeholder="прізвище"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Номер телефону</label><input type="text" class="form-control" placeholder="введіть номер телефону" value="{{user.phone}}"></div>
+                        <div class="col-md-6"><label class="labels">Ім'я</label><input type="text" name="first_name" class="form-control" placeholder="ім'я" value="{{user.first_name}}"></div>
+                        <div class="col-md-6"><label class="labels">Прізвище</label><input type="text" class="form-control" name="last_name" value="{{user.last_name}}" placeholder="прізвище"></div>
+                    </div>
                     
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Електрона пошта</label><input readonly type="text" class="form-control" placeholder="введіть електрону почту" value="{{user.email}}"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Пароль</label><input type="password" class="form-control" placeholder="введіть новий пароль" value=""></div>
-                </div>
-                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Номер телефону</label><input type="text" readonly class="form-control" placeholder="введіть номер телефону" value="{{user.phone}}"></div>
+                        
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Електрона пошта</label><input readonly type="text" class="form-control" placeholder="введіть електрону почту" value="{{user.email}}"></div>
+                    </div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Зберегти</button></div>
+                </form>
             </div>
         </div>
 
